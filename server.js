@@ -1,12 +1,11 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
-const bodyParser = require('body-parser');
 const app = express();
 
 
 port = 3000
 const password = 'mitpassword'
-const user = 'xjbha@evida.dk'
+const user = 'mymail@mail.com'
 
 //function that opens TDC selvbetjening and login
 async function openTDC() {
@@ -25,6 +24,16 @@ async function openTDC() {
     await browser.close();
     }
 
+async function oprettelse(nummer, mail, navn) {
+    return 'test'
+}
+async function opsigelse(nummer, mail, navn) {
+    return 'test'
+}
+
+async function nummerflytning(nummer, mail, navn) {
+    return 'test'
+}
 
 //get request that opens TDC selvbetjening and login
 app.get('/tdc-login', async (req, res) => {
