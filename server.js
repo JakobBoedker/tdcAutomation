@@ -7,22 +7,37 @@ port = 3000
 const password = 'mitpassword'
 const user = 'mymail@mail.com'
 
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 //function that opens TDC selvbetjening and login
 async function openTDC() {
-    const browser = await puppeteer.launch({headless: false});
-    const page = await browser.newPage();
-    await page.goto('https://selvbetjening.tdc.dk/');
-    await page.waitForSelector('#username');
-    await page.type('#username', user);
-    await page.type('#password', password);
-    await page.click('#loginButton');
-    await page.waitForSelector('#ink');
-    const ink = await page.evaluate(() => {
-        return document.querySelector('#ink').innerText;
-    });
-    console.log(ink);
-    await browser.close();
-    }
+
+    try{
+        const browser = await puppeteer.launch(
+            {headless: false},
+            {args: ['--incognito']}
+        );
+        const page = await browser.newPage();
+        await page.goto('https://selvbetjening.tdc.dk/');
+        await page.waitForSelector('#username');
+        await page.type('#username', user);
+        await page.type('#password', password);
+        //await page.waitForSelector('#ink');
+        await sleep(5000);
+        await page.click('#declineButton');
+        await page.click('#post-button');
+        const ink = await page.evaluate(() => {
+            return document.querySelector('#ink').innerText;
+        });
+        console.log(ink);
+        await browser.close();
+    } catch (error) {
+        console.log(error)
+
+    }}
 
 async function oprettelse(nummer, mail, navn) {
     return 'test'
