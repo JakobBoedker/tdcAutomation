@@ -4,8 +4,8 @@ const app = express();
 
 
 port = 3000
-const password = 'mitpassword'
-const user = 'mymail@mail.com'
+const password = '***********'
+const user = '************'
 
 
 function sleep(ms) {
@@ -13,31 +13,6 @@ function sleep(ms) {
 }
 
 //function that opens TDC selvbetjening and login
-async function openTDC() {
-
-    try{
-        const browser = await puppeteer.launch(
-            {headless: false},
-            {args: ['--incognito']}
-        );
-        const page = await browser.newPage();
-        await page.goto('https://selvbetjening.tdc.dk/');
-        await page.waitForSelector('#username');
-        await page.type('#username', user);
-        await page.type('#password', password);
-        //await page.waitForSelector('#ink');
-        await sleep(5000);
-        await page.click('#declineButton');
-        await page.click('#post-button');
-        const ink = await page.evaluate(() => {
-            return document.querySelector('#ink').innerText;
-        });
-        console.log(ink);
-        await browser.close();
-    } catch (error) {
-        console.log(error)
-
-    }}
 
 async function oprettelse(nummer, mail, navn) {
     return 'test'
@@ -53,7 +28,23 @@ async function nummerflytning(nummer, mail, navn) {
 //get request that opens TDC selvbetjening and login
 app.get('/tdc-login', async (req, res) => {
   try {
-        openTDC();
+        const browser = await puppeteer.launch(
+            {headless: false},
+            {args: ['--incognito']}
+        );
+        const page = await browser.newPage();
+        await page.goto('https://selvbetjening.tdc.dk/');
+        await page.waitForSelector('#username');
+        await page.type('#username', user);
+        await page.type('#password', password);
+        await sleep(2000);
+        await page.click('#declineButton');
+        await page.click('#post-button');
+        //const ink = await page.evaluate(() => {
+        //    return document.querySelector('#ink').innerText;
+        //});
+        //console.log(ink);
+        await browser.close();
         res.send('TDC opened');
     } catch (error) {
         console.log(error);
